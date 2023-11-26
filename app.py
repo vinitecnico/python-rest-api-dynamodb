@@ -20,7 +20,9 @@ def get_items():
 @app.route('/items', methods=['POST'])
 def create_item():
     item_service.create(request.get_json())
-    return jsonify({'message': 'Item created successfully'})
+    response = jsonify({'message': 'Item created successfully'})
+    response.status_code = 201
+    return response
 
 # @app.route('/items/<item_id>', methods=['PUT'])
 # def update_item(item_id):
