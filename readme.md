@@ -35,6 +35,14 @@
     curl --location 'http://localhost:5000/items/1'
 ```
 
+### PUT - update
+
+```
+    curl --location --request PUT 'http://localhost:5000/items/1' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{"id": 1, "name": "test silva", "age": 40, "email": "test1-silva@example.com"}'
+```
+
 ### DELETE
 
 ```

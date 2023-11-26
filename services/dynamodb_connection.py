@@ -53,11 +53,12 @@ class DynamoDBConnection:
         response = self.table.put_item(Item=item)
         return response
     
-    def update_item(self, key, update_expression, expression_attribute_values):
+    def update_item(self, key, update_expression, expression_attribute_values, expression_attribute_names=None):
         response = self.table.update_item(
             Key=key,
             UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_attribute_values
+            ExpressionAttributeValues=expression_attribute_values,
+            ExpressionAttributeNames=expression_attribute_names
         )
         return response
     
