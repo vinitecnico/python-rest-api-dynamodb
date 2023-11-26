@@ -24,12 +24,10 @@ def create_item():
     item_service.create(request.get_json())
     return jsonify({'message': 'Item created successfully'}), 201
 
-# @app.route('/items/<item_id>', methods=['PUT'])
-# def update_item(item_id):
-#     item = request.get_json()
-#     item['id'] = {'N': item_id}
-#     response = dynamodb.put_item(TableName=table_name, Item=item)
-#     return jsonify({'message': 'Item updated successfully'})
+@app.route('/items/<item_id>', methods=['PUT'])
+def update_item(item_id):
+    item_service.update(int(item_id), request.get_json())
+    return jsonify({'message': 'Item updated successfully'})
 
 
 @app.route('/items/<item_id>', methods=['DELETE'])
