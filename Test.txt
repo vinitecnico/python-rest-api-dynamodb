@@ -1,0 +1,59 @@
+
+# Configuração do Trigger para a função Lambda
+resource "aws_lambda_permission" "allow_execution" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.minha_lambda_function.function_name
+  principal = "elasticloadbalancing.amazonaws.com"
+}
+
+resource "aws_lambda_function" "minha_lambda_function" {
+  function_name = "nome-da-sua-funcao-lambda"
+  role         = aws_iam_role.lambda_exec_role.arn
+  handler      = "lambda_function.lambda_handler"
+  runtime      = "python3.8"
+  filename     = "caminho-para-o-seu-zip-da-funcao-lambda.zip"
+
+  environment {
+    variables = {
+      ENDPOINT_URL = "https://seu-load-balancer-url/seu-endpoint"
+    }
+  }
+
+import os
+import requests
+
+def lambda_handler(event, context):
+    # Obtenha o valor da variável de ambiente configurada no Terraform
+    endpoint_url = os.environ.get('NOME_DA_SUA_VARIAVEL_DE_AMBIENTE')
+
+    try:
+        # Faça uma solicitação GET ao endpoint com verificação de certificado
+        response = requests.get(endpoint_url, verify=True)
+
+        # Verifique se a solicitação foi bem-sucedida (código 200)
+        if response.status_code == 200:
+            return {
+                'statusCode': 200,
+                'body': response.text
+            }
+        else:
+            return {
+                'statusCode': response.status_code,
+                'body': 'Erro ao chamar o endpoint'
+            }
+
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': str(e)
+        }
+
+resource "aws_lambda_function" "minha_lambda_function" {
+  # outras configurações...
+
+  environment {
+    variables = {
+      NOME_DA_SUA_VARIAVEL_DE_AMBIENTE = "valor-da-sua-variavel"
+    }
+  }
+}
