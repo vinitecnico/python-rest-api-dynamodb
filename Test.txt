@@ -57,3 +57,17 @@ resource "aws_lambda_function" "minha_lambda_function" {
     }
   }
 }
+
+
+import pytest
+
+def divide(a, b):
+    if b == 0:
+        raise ZeroDivisionError("Cannot divide by zero")
+    return a / b
+
+def test_divide_by_zero():
+    with pytest.raises(ZeroDivisionError) as excinfo:
+        divide(10, 0)
+    
+    assert str(excinfo.value) == "Cannot divide by zero"
